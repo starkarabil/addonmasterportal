@@ -58,7 +58,7 @@ const OktagonURLParameter = ParametricURL.extend(/** @lends OktagonURLParameter.
             districtNameToZoom = this.hasBezirk(districtFromUrl);
             if (districtNameToZoom === "") {
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider fehlgeschlagen!</strong>"
+                    text: "<strong>Der parametrisierte Aufruf des Portals ist leider fehlgeschlagen!</strong>"
                     + "<br>"
                     + "<small>Der Parameter BEZIRK=" + districtFromUrl + " existiert nicht.</small>",
                     kategorie: "alert-warning"
@@ -87,7 +87,7 @@ const OktagonURLParameter = ParametricURL.extend(/** @lends OktagonURLParameter.
             searchType: "streetsWithoutHouseNumberSearch"
         };
 
-        if (result.hasOwnProperty("HAUSNUMMER")) {
+        if (result.hasOwnProperty("HAUSNUMMER") && result.HAUSNUMMER.length > 0) {
             address.housenumber = this.getParameterValue(result, "HAUSNUMMER");
             address.searchType = "adressSearch";
 
@@ -170,9 +170,9 @@ const OktagonURLParameter = ParametricURL.extend(/** @lends OktagonURLParameter.
      */
     alertWrongInputParameters: function () {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>Der Parametrisierte Aufruf des Portals ist leider fehlgeschlagen!</strong>"
+            text: "<strong>Der parametrisierte Aufruf des Portals ist leider fehlgeschlagen!</strong>"
                 + "<br>"
-                + "<small>Es konnte keine Adresse gefunden werde. Bitte prüfen Sie die Eingabeparmeter.</small>",
+                + "<small>Es konnte keine Adresse gefunden werde. Bitte prüfen Sie die Eingabeparameter.</small>",
             kategorie: "alert-warning"
         });
     },
