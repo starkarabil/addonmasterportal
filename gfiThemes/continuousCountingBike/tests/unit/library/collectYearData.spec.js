@@ -1,6 +1,5 @@
 import {expect} from "chai";
-import collectYearData from "../../../library/collectYearData";
-
+import {collectYearData, splitYearData} from "../../../library/collectYearData";
 
 describe("src/modules/tools/gfi/components/themes/continuousCountingBike/library/collectYearData.js", () => {
 
@@ -44,4 +43,21 @@ describe("src/modules/tools/gfi/components/themes/continuousCountingBike/library
         });
     });
 
+    describe("splitYearData", () => {
+        it("should be a function", () => {
+            expect(typeof splitYearData).to.equal("function");
+        });
+        it("should disallow invalid dates into the result", () => {
+            const data = "2021,1,0|2021,53,0";
+
+            expect(splitYearData(data)).to.be.an("array").to.have.lengthOf(1);
+        });
+        it("should interpret a negativ week number as the same week without minus but of the previous year, should sort it in front", () => {
+            const data = "2021,1,0|2021,-53,0",
+                result = splitYearData(data);
+
+            expect(result).to.be.an("array").to.have.lengthOf(2);
+            expect(result[0].year).to.equal(2020);
+        });
+    });
 });

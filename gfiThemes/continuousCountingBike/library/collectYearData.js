@@ -4,36 +4,51 @@ import thousandsSeparator from "../../../../src/utils/thousandsSeparator.js";
 import {getDataAttributes, getLegendAttributes, createxAxisTickValues} from "./helper.js";
 
 /**
-         * splitYearDataset creates a json for the graphic module with the yearLine data.
-         * @param  {String} yearLine contains the year data of gfi content
-         * @fires Util#event:RadioRequestUtilPunctuate
-         * @return {Array} tempArr array with prepared objects of the data
-         */
-export function splitYearData (yearLine) {
+ * splitYearDataset creates a json for the graphic module with the yearLine data.
+ * @param  {String} yearLine contains the year data of gfi content
+ * @fires Util#event:RadioRequestUtilPunctuate
+ * @return {Array} tempArr array with prepared objects of the data
+ */
+function splitYearData (yearLine) {
     const dataSplit = yearLine ? yearLine.split("|") : [],
-        tempArr = [];
+        result = [];
 
     dataSplit.forEach(data => {
         const splitted = data.split(","),
-            weeknumber = splitted[1],
-            year = splitted[0],
             total = parseFloat(splitted[2]),
             r_in = splitted[3] ? parseFloat(splitted[3]) : null,
             r_out = splitted[4] ? parseFloat(splitted[4]) : null;
+        let year = parseInt(splitted[0], 10),
+            weeknumber = parseInt(splitted[1], 10),
+            timestamp = "";
 
-        tempArr.push({
+        // the weeknumber can be negative. In this case we assume that a calendar week of the previous year is ment.
+        // e.g. "2021,-53,..." -> means: KW53 of 2020
+        if (weeknumber < 0) {
+            year--;
+            weeknumber = Math.abs(weeknumber);
+        }
+
+        timestamp = moment(year + "-" + weeknumber, "YYYY-WW").toDate();
+
+        // if the timestamp is an Invalid Date (isNaN), do not touch this data
+        if (isNaN(timestamp)) {
+            return;
+        }
+
+        result.push({
             class: "dot",
             style: "circle",
-            timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
-            year: year,
-            total: total,
+            timestamp,
+            year,
+            total,
             tableData: thousandsSeparator(total),
-            r_in: r_in,
-            r_out: r_out
+            r_in,
+            r_out
         });
     });
 
-    return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
+    return result.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
 }
 
 
@@ -42,14 +57,14 @@ export function splitYearData (yearLine) {
  * @param {Array} data array of objects from yearLineData
  * @returns {Object} charts data
  */
-export function getYearData (data) {
-    const useData = data && data[0],
-        graphArray = useData ? getDataAttributes(data[0]) : "",
-        newData = useData ? [] : "",
-        legendArray = useData ? getLegendAttributes(data[0]) : "",
-        year = useData ? data[0].year : "";
+function getYearData (data) {
+    const hasData = Array.isArray(data) && typeof data[data.length - 1] === "object",
+        graphArray = hasData ? getDataAttributes(data[data.length - 1]) : "",
+        newData = hasData ? [] : "",
+        legendArray = hasData ? getLegendAttributes(data[data.length - 1]) : "",
+        year = hasData ? data[data.length - 1].year : "";
 
-    if (useData) {
+    if (hasData) {
         data.forEach(val => {
             val.timestamp = moment(val.timestamp).format("w");
             newData.push(val);
@@ -76,6 +91,8 @@ export function getYearData (data) {
  * @param {String} data contains the yearLine data of gfi content
  * @returns {Object} charts data
  */
-export default function collectYearData (data) {
+function collectYearData (data) {
     return getYearData(splitYearData(data));
 }
+
+export {collectYearData, getYearData, splitYearData};

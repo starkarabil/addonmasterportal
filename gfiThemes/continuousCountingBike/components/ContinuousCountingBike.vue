@@ -3,7 +3,7 @@ import {mapGetters} from "vuex";
 import {omit} from "../../../../src/utils/objectHelpers";
 import ContinuousCountingBikeInfo from "./ContinuousCountingBikeInfo.vue";
 import ContinuousCountingBikeChart from "./ContinuousCountingBikeChart.vue";
-import collectYearData from "../library/collectYearData";
+import {collectYearData} from "../library/collectYearData";
 import collectWeekData from "../library/collectWeekData";
 import collectDayData from "../library/collectDayData";
 import collectInfoData from "../library/collectInfoData";
