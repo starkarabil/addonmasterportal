@@ -144,7 +144,7 @@ export default {
         >
             <table class="table table-hover">
                 <thead>
-                    <th class="text-align-center">
+                    <th>
                         {{
                             $t(
                                 "additional:modules.tools.gfi.themes.continuousCountingBike.name"

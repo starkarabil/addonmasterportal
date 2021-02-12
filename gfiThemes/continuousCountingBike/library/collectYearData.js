@@ -14,12 +14,12 @@ function splitYearData (yearLine) {
         result = [];
 
     dataSplit.forEach(data => {
-        const splitted = data.split(","),
-            total = parseFloat(splitted[2]),
-            r_in = splitted[3] ? parseFloat(splitted[3]) : null,
-            r_out = splitted[4] ? parseFloat(splitted[4]) : null;
-        let year = parseInt(splitted[0], 10),
-            weeknumber = parseInt(splitted[1], 10),
+        const parts = data.split(","),
+            total = parseFloat(parts[2]),
+            r_in = parts[3] ? parseFloat(parts[3]) : null,
+            r_out = parts[4] ? parseFloat(parts[4]) : null;
+        let year = parseInt(parts[0], 10),
+            weeknumber = parseInt(parts[1], 10),
             timestamp = "";
 
         // the weeknumber can be negative. In this case we assume that a calendar week of the previous year is ment.
@@ -66,7 +66,7 @@ function getYearData (data) {
 
     if (hasData) {
         data.forEach(val => {
-            val.timestamp = moment(val.timestamp).format("w");
+            val.timestamp = moment(val.timestamp).isoWeek();
             newData.push(val);
         });
     }
@@ -81,7 +81,7 @@ function getYearData (data) {
         graphArray: graphArray,
         xAxisTicks: {
             unit: i18next.t("additional:modules.tools.gfi.themes.continuousCountingBike.cw"),
-            values: createxAxisTickValues(data, 5)
+            values: createxAxisTickValues(data, 20)
         },
         legendArray: legendArray
     };

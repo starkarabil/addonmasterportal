@@ -1,9 +1,9 @@
 
 /**
-         * Returns an array of key values.
-         * @param  {Object} inspectData contains the first row of the dataset
-         * @return {String[]} showData array with key values
-         */
+ * Returns an array of key values.
+ * @param  {Object} inspectData contains the first row of the dataset
+ * @return {String[]} showData array with key values
+ */
 export function getDataAttributes (inspectData) {
     const showData = ["total"];
 
@@ -18,50 +18,29 @@ export function getDataAttributes (inspectData) {
 }
 
 /**
-         * createxAxisTickValues returns an array of the tick values for the graph module
-         * @param  {Array} data array of objects from dayLineData
-         * @param  {Integer} xThinning number for the distance between the ticks
-         * @return {Array} tickValuesArray array of the tick values
-         */
-export function createxAxisTickValues (data = [], xThinning) {
-    let tickValuesArray = [],
-        startsWith = 0,
-        xThinningVal = xThinning;
+ * createxAxisTickValues returns an array of the tick values for the graph module
+ * @param  {Array} data array of objects from dayLineData
+ * @param  {Integer} xThreshold incrementing x axis label gaps: SUM[gap+1](xThreshold * gap < data.length)
+ * @return {Array} tickValuesArray array of the tick values
+ */
+export function createxAxisTickValues (data = [], xThreshold = 0) {
+    const len = data.length,
+        mod = xThreshold > 0 ? Math.ceil(len / xThreshold) : 1,
+        result = [];
 
-    data.forEach(ele => {
-        tickValuesArray.push(ele.timestamp);
+    data.forEach((ele, i) => {
+        if (i % mod) {
+            return;
+        }
+        result.push(ele.timestamp);
     });
-
-    tickValuesArray = tickValuesArray.filter((d, i) => {
-        let val;
-
-        if (d === "1") {
-            startsWith = 1;
-            val = i;
-        }
-        else if (i + 1 === tickValuesArray.length) {
-            val = 0;
-        }
-        else if (tickValuesArray.length < 10) {
-            val = 0;
-        }
-        else if (i === (xThinningVal - startsWith)) {
-            val = 0;
-            xThinningVal = xThinningVal + xThinning;
-        }
-        else {
-            val = i % xThinningVal;
-        }
-        return !val;
-    });
-
-    return tickValuesArray;
+    return result;
 }
 /**
-         * Returns an array for the graphic legend
-         * @param  {Object} inspectData contains the first row of the dataset
-         * @return {Array} legendData contains an array of objecs for the graphic legend
-         */
+ * Returns an array for the graphic legend
+ * @param  {Object} inspectData contains the first row of the dataset
+ * @return {Array} legendData contains an array of objecs for the graphic legend
+ */
 export function getLegendAttributes (inspectData) {
     const legendData = [{
         class: "dot",

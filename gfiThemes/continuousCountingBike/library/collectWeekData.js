@@ -60,7 +60,7 @@ export function getWeekData (data) {
         },
         graphArray: graphArray,
         xAxisTicks: {
-            values: createxAxisTickValues(data, 1)
+            values: createxAxisTickValues(data)
         },
         legendArray: legendArray
     };

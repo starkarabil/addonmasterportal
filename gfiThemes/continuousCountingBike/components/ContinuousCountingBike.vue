@@ -238,7 +238,7 @@ export default {
      padding: 5px 20px 5px 20px;
         @media (max-width: 767px) {
             width: inherit;
-            height: 80vh;
+            max-height: 80vh;
             padding-left: 10px;
             padding-right: 10px;
 
@@ -249,11 +249,11 @@ export default {
         }
         @media (min-width: 768px) {
             width: 80vw;
-            height: 60vh;
+            max-height: 60vh;
         }
         @media (min-width: 1024px) {
             width: 50vw;
-            height: 60vh;
+            max-height: 60vh;
         }
     .bikeLevelHeader{
         margin-bottom: 0;

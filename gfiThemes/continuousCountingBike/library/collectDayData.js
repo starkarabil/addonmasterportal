@@ -62,7 +62,7 @@ export function getDayData (data) {
         graphArray: graphArray,
         xAxisTicks: {
             unit: "Uhr",
-            values: createxAxisTickValues(data, 6)
+            values: createxAxisTickValues(data, 12)
         },
         legendArray: legendArray
     };
