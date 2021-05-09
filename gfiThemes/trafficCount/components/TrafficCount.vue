@@ -141,10 +141,12 @@ export default {
                 url = feature.requestUrl,
                 sensorThingsApiVersion = "v" + feature.versionUrl,
                 mqttOptions = {
-                    mqttUrl: "wss://" + url.split("/")[2] + "/mqtt",
-                    mqttVersion: "3.1.1",
+                    host: url.split("/")[2],
                     rhPath: url,
-                    context: this
+                    context: this,
+                    path: "/mqtt",
+                    protocol: "wss",
+                    mqttVersion: "3.1.1"
                 };
 
             this.api = new TrafficCountCache(url, sensorThingsApiVersion, mqttOptions, sensorThingsApiOpt);
