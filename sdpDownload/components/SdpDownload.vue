@@ -31,17 +31,19 @@ export default {
          * @returns {void}
          */
         active (value) {
-            this.$nextTick(() => {
-                if (value) {
+            if (value) {
+                this.$nextTick(() => {
                     this.toggleRasterLayer();
                     this.loadWfsRaster();
                     this.$refs.graphicalSelection.setStatus(value);
                     this.$refs.graphicalSelection.resetGeographicSelection();
-                }
-                else {
-                    this.toggleRasterLayer();
-                }
-            });
+                });
+            }
+            else {
+                this.toggleRasterLayer();
+                this.$refs.graphicalSelection.setStatus(value);
+                this.$refs.graphicalSelection.resetView();
+            }
         },
         /**
          * Sets the graphicalSelection active or not
