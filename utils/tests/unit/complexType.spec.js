@@ -4,6 +4,7 @@ import {
     changeMetadata,
     convertComplexTypeToPiechart,
     convertComplexTypeToBarchart,
+    confineComplexTypeValues,
     convertComplexTypeToLinechart,
     convertComplexTypesToMultilinechart,
     isComplexType,
@@ -271,6 +272,48 @@ describe("addons/utils/complexType.js", () => {
 
             expect(convertComplexTypeToPiechart(complexData)).to.deep.equal(chartJSData);
         });
+        it("should convert complex data to chartJS data, if label is empty, with confined array", () => {
+            const complexData = {
+                    metadata: {
+                        type: "timeseries",
+                        format: "YYYY/YY",
+                        description: ""
+                    },
+                    values: [
+                        {key: "2019/20", value: 372},
+                        {key: "2018/19", value: 392},
+                        {key: "2017/18", value: 398},
+                        {key: "2016/17", value: 381},
+                        {key: "2015/16", value: 384}
+                    ]
+                },
+                chartJSData = {
+                    datasets: [{
+                        label: "",
+                        data: [
+                            392,
+                            398,
+                            381,
+                            384
+                        ],
+                        backgroundColor: [
+                            "rgba(230, 159, 0, 1)",
+                            "rgba(86, 180, 233, 1)",
+                            "rgba(0, 158, 115, 1)",
+                            "rgba(240, 228, 66, 1)"
+                        ],
+                        hoverOffset: 4
+                    }],
+                    labels: [
+                        "2018/19",
+                        "2017/18",
+                        "2016/17",
+                        "2015/16"
+                    ]
+                };
+
+            expect(convertComplexTypeToPiechart(complexData, null, false, 4)).to.deep.equal(chartJSData);
+        });
         it("should convert complex data to chartJS data, if description is undefined", () => {
             const complexData = {
                     metadata: {
@@ -423,6 +466,130 @@ describe("addons/utils/complexType.js", () => {
                 };
 
             expect(convertComplexTypeToBarchart(complexData)).to.deep.equal(chartJSData);
+        });
+        it("should convert complex data to bar chartJS data with confined array", () => {
+            const complexData = {
+                    metadata: {
+                        type: "timeseries",
+                        format: "YYYY/YY",
+                        description: "Anzahl"
+                    },
+                    values: [
+                        {key: "2019/20", value: 370},
+                        {key: "2018/19", value: 371},
+                        {key: "2017/18", value: 372},
+                        {key: "2016/17", value: 373},
+                        {key: "2015/16", value: 374},
+                        {key: "2019/20", value: 375},
+                        {key: "2018/19", value: 376},
+                        {key: "2017/18", value: 377},
+                        {key: "2016/17", value: 378},
+                        {key: "2015/16", value: 379}
+                    ]
+                },
+                chartJSData = {
+                    datasets: [{
+                        label: "Anzahl",
+                        data: [
+                            375,
+                            376,
+                            377,
+                            378,
+                            379
+                        ],
+                        backgroundColor: "rgba(0, 48, 99, 1)",
+                        hoverBackgroundColor: "rgba(181, 216, 250, 1)",
+                        borderWidth: 1
+                    }],
+                    labels: [
+                        "2019/20",
+                        "2018/19",
+                        "2017/18",
+                        "2016/17",
+                        "2015/16"
+                    ]
+                };
+
+            expect(convertComplexTypeToBarchart(complexData, null, 5)).to.deep.equal(chartJSData);
+        });
+        it("should confine values from complexDataValues to the given parameter", () => {
+            const complexDataValues = [
+                    {key: "2019/20", value: 370},
+                    {key: "2018/19", value: 371},
+                    {key: "2017/18", value: 372},
+                    {key: "2016/17", value: 373},
+                    {key: "2015/16", value: 374},
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ],
+                confinedComplexDataValues = [
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ];
+
+            expect(confineComplexTypeValues(complexDataValues, 5)).to.deep.equal(confinedComplexDataValues);
+        });
+        it("should confine values from complexDataValues to the given parameter", () => {
+            const complexDataValues = [
+                    {key: "2019/20", value: 370},
+                    {key: "2018/19", value: 371},
+                    {key: "2017/18", value: 372},
+                    {key: "2016/17", value: 373},
+                    {key: "2015/16", value: 374},
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ],
+                confinedComplexDataValues = [
+                    {key: "2019/20", value: 370},
+                    {key: "2018/19", value: 371},
+                    {key: "2017/18", value: 372},
+                    {key: "2016/17", value: 373},
+                    {key: "2015/16", value: 374},
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ];
+
+            expect(confineComplexTypeValues(complexDataValues, "string")).to.deep.equal(confinedComplexDataValues);
+        });
+        it("should confine values from complexDataValues to the given parameter", () => {
+            const complexDataValues = [
+                    {key: "2019/20", value: 370},
+                    {key: "2018/19", value: 371},
+                    {key: "2017/18", value: 372},
+                    {key: "2016/17", value: 373},
+                    {key: "2015/16", value: 374},
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ],
+                confinedComplexDataValues = [
+                    {key: "2019/20", value: 370},
+                    {key: "2018/19", value: 371},
+                    {key: "2017/18", value: 372},
+                    {key: "2016/17", value: 373},
+                    {key: "2015/16", value: 374},
+                    {key: "2019/20", value: 375},
+                    {key: "2018/19", value: 376},
+                    {key: "2017/18", value: 377},
+                    {key: "2016/17", value: 378},
+                    {key: "2015/16", value: 379}
+                ];
+
+            expect(confineComplexTypeValues(complexDataValues, 12)).to.deep.equal(confinedComplexDataValues);
         });
         it("should convert complex data to chartJS data with a gap in the dataset, if one value is undefined", () => {
             const complexData = {
@@ -1396,6 +1563,82 @@ describe("addons/utils/complexType.js", () => {
 
             expect(convertComplexTypesToMultilinechart(complexData, {}, lineColors)).to.deep.equal(expected);
         });
+    });
+    it("should convert complex data to chartJS data with given colors, if colors are given, with confined array", () => {
+        const complexData = [
+                {
+                    metadata: {
+                        type: "timeseries",
+                        format: "YYYY/YY",
+                        description: "Anzahl"
+                    },
+                    values: [
+                        {key: "2019/20", value: 372},
+                        {key: "2018/19", value: 392},
+                        {key: "2017/18", value: 398},
+                        {key: "2016/17", value: 381},
+                        {key: "2015/16", value: 384}
+                    ]
+                },
+                {
+                    metadata: {
+                        type: "timeseries",
+                        format: "YYYY/YY",
+                        description: "Gewicht"
+                    },
+                    values: [
+                        {key: "2019/20", value: 72},
+                        {key: "2018/19", value: 92},
+                        {key: "2017/18", value: 98},
+                        {key: "2016/17", value: 81},
+                        {key: "2015/16", value: 84}
+                    ]
+                }
+            ],
+            lineColors = [[213, 94, 0, 1], [204, 121, 167, 1]],
+            expected = {
+                datasets: [
+                    {
+                        label: "Anzahl",
+                        data: [
+                            398,
+                            381,
+                            384
+                        ],
+                        backgroundColor: "rgba(213, 94, 0, 1)",
+                        borderColor: "rgba(213, 94, 0, 1)",
+                        borderWidth: 2,
+                        fill: false,
+                        lineTension: 0,
+                        pointRadius: 4,
+                        pointHoverRadius: 4,
+                        spanGaps: false
+                    },
+                    {
+                        label: "Gewicht",
+                        data: [
+                            98,
+                            81,
+                            84
+                        ],
+                        backgroundColor: "rgba(204, 121, 167, 1)",
+                        borderColor: "rgba(204, 121, 167, 1)",
+                        borderWidth: 2,
+                        fill: false,
+                        lineTension: 0,
+                        pointRadius: 4,
+                        pointHoverRadius: 4,
+                        spanGaps: false
+                    }
+                ],
+                labels: [
+                    "2017/18",
+                    "2016/17",
+                    "2015/16"
+                ]
+            };
+
+        expect(convertComplexTypesToMultilinechart(complexData, {}, lineColors, 3)).to.deep.equal(expected);
     });
 
     describe("changeMetadata", () => {

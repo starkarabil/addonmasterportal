@@ -86,6 +86,7 @@ export default {
             propertyName: "",
             title: "",
             table_title: "",
+            toConfineNumber: 10,
 
             statgeb_value: false,
             sozialraum_value: false,

@@ -71,6 +71,7 @@ export default {
         return {
             // anteil_sus_abi or anteil_sus_ohneabschluss
             susType: "",
+            toConfineNumber: 10,
 
             stadtteil_name: "",
             sozialraum_name: "",
@@ -198,7 +199,7 @@ export default {
                 this.anteil_sus_abi = "g.F.";
             }
             if (hasComplexTypeValues(this.properties?.anteil_sus_abi)) {
-                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.properties.anteil_sus_abi, 2)));
+                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.properties.anteil_sus_abi, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions = getChartOptions("anteil_sus_abi", this.chartOptions);
                 if (this.barchartDataOptions === false) {
                     this.barchartDataOptions = getChartOptionsForPercentage("anteil_sus_abi", this.chartOptions);
@@ -241,7 +242,7 @@ export default {
                 this.anteil_sus_ohneabschluss = "g.F.";
             }
             if (hasComplexTypeValues(this.properties?.anteil_sus_ohneabschluss)) {
-                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.properties.anteil_sus_ohneabschluss, 2)));
+                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.properties.anteil_sus_ohneabschluss, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions = getChartOptions("anteil_sus_ohneabschluss", this.chartOptions);
                 if (this.barchartDataOptions === false) {
                     this.barchartDataOptions = getChartOptionsForPercentage("anteil_sus_ohneabschluss", this.chartOptions);
@@ -321,7 +322,10 @@ export default {
                                                 optimizeComplexTypeValues(complexTypeOSA, 2),
                                                 optimizeComplexTypeValues(complexTypeGesamt, 2)
                                             ])
-                                        )
+                                        ),
+                                        null,
+                                        false,
+                                        this.toConfineNumber
                                     );
                                 }
                                 else {

@@ -85,15 +85,32 @@ function changeMetadata (complexType, key, value) {
 }
 
 /**
+ * limits the number of elements from the complexTypeValues array to the given parameter confineNumber
+ * @param {complexTypeValues[]} complexTypeValues an array of values
+ * @param {Number} toConfineNumber the number of elements to be present in array
+ * @returns {confinedComplexTypeValues[]} restricted array
+ */
+function confineComplexTypeValues (complexTypeValues, toConfineNumber) {
+    let confinedComplexTypeValues = complexTypeValues;
+
+    if (typeof toConfineNumber === "number" && complexTypeValues.length > toConfineNumber) {
+        confinedComplexTypeValues = complexTypeValues.slice(-toConfineNumber);
+    }
+
+    return confinedComplexTypeValues;
+}
+
+/**
  * converter for complexTypes to pie chart data for ChartJS
  * @param {ComplexType} complexType the complexType to convert - sort complexTypes beforehand with sortComplexType
  * @param {Object} [options=null] options to apply to each pice of pie
  * @param {String[]|boolean} [pieColors=false] the array of colors (everything convertColor accepts) that overwrites the default colors
+ * @param {Number} toConfineNumber the number of complexTypeValues to be displayed
  * @see {@link https://jfly.uni-koeln.de/color/}
  * @return {Object|boolean} an object following chartJS dataset configuration or false on failure
  * @see {@link https://www.chartjs.org/docs/master/general/data-structures.html}
  */
-function convertComplexTypeToPiechart (complexType, options = null, pieColors = false) {
+function convertComplexTypeToPiechart (complexType, options = null, pieColors = false, toConfineNumber = null) {
     if (!isComplexType(complexType)) {
         return false;
     }
@@ -109,9 +126,10 @@ function convertComplexTypeToPiechart (complexType, options = null, pieColors = 
             [0, 114, 178, 1],
             [213, 94, 0, 1],
             [204, 121, 167, 1]
-        ];
+        ],
+        complexTypeValues = toConfineNumber ? confineComplexTypeValues(complexType.values, toConfineNumber) : complexType.values;
 
-    complexType.values.forEach((elem, idx) => {
+    complexTypeValues.forEach((elem, idx) => {
         // elem without value mustn't be added for piecharts
         if (typeof elem === "object" && elem !== null && elem.key && elem.value) {
             data.push(elem.value);
@@ -150,11 +168,12 @@ function convertComplexTypeToLinechart (complexType, options = null, lineColor =
  * @param {ComplexType[]} complexTypes an array of complexTypes to convert - sort each complexTypes beforehand with sortComplexType
  * @param {Object} [options=null] options to apply to each line
  * @param {String[]|boolean} [lineColors=false] the array of colors (everything convertColor accepts) that overwrites the default colors
+ * @param {Number} toConfineNumber the number of complexTypeValues to be displayed
  * @see {@link https://jfly.uni-koeln.de/color/}
  * @return {Object|boolean} an object following chartJS dataset configuration for multilinecharts or false on failure
  * @see {@link https://www.chartjs.org/docs/master/general/data-structures.html}
  */
-function convertComplexTypesToMultilinechart (complexTypes, options = null, lineColors = false) {
+function convertComplexTypesToMultilinechart (complexTypes, options = null, lineColors = false, toConfineNumber = null) {
     if (!Array.isArray(complexTypes)) {
         return false;
     }
@@ -177,9 +196,10 @@ function convertComplexTypesToMultilinechart (complexTypes, options = null, line
         }
         const data = [],
             labels = [],
-            label = complexType.metadata.description ? complexType.metadata.description : "";
+            label = complexType.metadata.description ? complexType.metadata.description : "",
+            complexTypeValues = toConfineNumber ? confineComplexTypeValues(complexType.values, toConfineNumber) : complexType.values;
 
-        complexType.values.forEach(elem => {
+        complexTypeValues.forEach(elem => {
             if (typeof elem === "object" && elem !== null && elem.key) {
                 labels.push(elem.key);
                 data.push(typeof elem.value === "number" || elem.value ? elem.value : null);
@@ -214,18 +234,20 @@ function convertComplexTypesToMultilinechart (complexTypes, options = null, line
  * converter for complexTypes to bar chart data for ChartJS
  * @param {ComplexType} complexType a complexType to convert - sort the complexType beforehand with sortComplexType
  * @param {Object} [options=null] options to apply to each bar
+ * @param {Number} toConfineNumber the number of complexTypeValues to be displayed
  * @return {Object|boolean} an object following chartJS dataset configuration for multilinecharts or false on failure
  * @see {@link https://www.chartjs.org/docs/master/general/data-structures.html}
  */
-function convertComplexTypeToBarchart (complexType, options = null) {
+function convertComplexTypeToBarchart (complexType, options = null, toConfineNumber = null) {
     if (!isComplexType(complexType)) {
         return false;
     }
     const label = complexType.metadata.description ? complexType.metadata.description : "",
         data = [],
-        labels = [];
+        labels = [],
+        complexTypeValues = toConfineNumber ? confineComplexTypeValues(complexType.values, toConfineNumber) : complexType.values;
 
-    complexType.values.forEach(elem => {
+    complexTypeValues.forEach(elem => {
         // for bar charts elem without value shall be shown as gaps - so no check of elem.value
         if (typeof elem === "object" && elem !== null && elem.key) {
             data.push(elem.value);

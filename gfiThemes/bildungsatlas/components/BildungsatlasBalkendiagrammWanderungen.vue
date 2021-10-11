@@ -76,6 +76,7 @@ export default {
             statgeb_id: "",
             sozialraum_name: "",
             stadtteil_name: "",
+            toConfineNumber: 10,
 
             wanderungssaldo_u6_complexType: false,
             wanderungssaldo_u6_aus_umland_complexType: false,
@@ -127,7 +128,7 @@ export default {
             this.wanderungssaldo_u6_ins_umland = isComplexType(this.wanderungssaldo_u6_ins_umland_complexType) ? thousandsSeparator(optimizeValueRootedInComplexType(this.wanderungssaldo_u6_ins_umland_complexType.values[0].value, 2)) : false;
 
             if (hasComplexTypeValues(this.wanderungssaldo_u6_complexType)) {
-                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_complexType, 2)));
+                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_complexType, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions = getChartOptions("wanderungssaldo_u6", this.chartOptions);
                 if (this.barchartDataOptions === false) {
                     this.barchartDataOptions = getChartOptionsForPercentage("wanderungssaldo_u6", this.chartOptions);
@@ -141,7 +142,7 @@ export default {
                 this.barchartDataOptions = {};
             }
             if (hasComplexTypeValues(this.wanderungssaldo_u6_aus_umland_complexType)) {
-                this.barchartData_aus_umland = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_aus_umland_complexType, 2)));
+                this.barchartData_aus_umland = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_aus_umland_complexType, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions_aus_umland = getChartOptionsForPercentage("wanderungssaldo_u6", this.chartOptions);
             }
             else {
@@ -149,7 +150,7 @@ export default {
                 this.barchartDataOptions_aus_umland = {};
             }
             if (hasComplexTypeValues(this.wanderungssaldo_u6_ins_umland_complexType)) {
-                this.barchartData_ins_umland = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_ins_umland_complexType, 2)));
+                this.barchartData_ins_umland = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(this.wanderungssaldo_u6_ins_umland_complexType, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions_ins_umland = getChartOptionsForPercentage("wanderungssaldo_u6", this.chartOptions);
             }
             else {

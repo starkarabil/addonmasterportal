@@ -73,6 +73,7 @@ export default {
     data () {
         return {
             propertyName: "kinder_vorschulischer_sf",
+            toConfineNumber: 10,
 
             title: "",
             table_title: "",
@@ -122,7 +123,7 @@ export default {
             const complexType = this.properties[this.propertyName];
 
             if (hasComplexTypeValues(complexType)) {
-                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(complexType, 2)));
+                this.barchartData = convertComplexTypeToBarchart(sortComplexType(optimizeComplexTypeValues(complexType, 2)), null, this.toConfineNumber);
                 this.barchartDataOptions = getChartOptionsForPercentage(this.propertyName, this.chartOptions);
                 if (this.barchartDataOptions === false) {
                     this.barchartDataOptions = {};
