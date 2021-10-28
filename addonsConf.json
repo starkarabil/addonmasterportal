@@ -21,6 +21,9 @@
   "tacticalMark": {
     "type": "tool"
   },
+  "screenPrint": {
+    "type": "tool"
+  },
   "resetTree": {
     "type": "tool"
   },

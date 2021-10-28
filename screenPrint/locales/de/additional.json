@@ -1,0 +1,9 @@
+{
+    "modules": {
+        "tools": {
+            "screenPrint": {
+                "title": "Drucken"
+            }
+        }
+    }
+}
