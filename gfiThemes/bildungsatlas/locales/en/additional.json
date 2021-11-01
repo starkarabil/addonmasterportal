@@ -7,6 +7,16 @@
         },
         "gfiThemes": {
             "bildungsatlas": {
+                "quickHelp": {
+                    "search": {
+                        "title": "Regionaler Bildungsatlas - Help",
+                        "searchForSchools": {
+                            "title": "Search for school locations",
+                            "infoA": "In order to search for school locations in the Bildungsatlas (e.g. by school name), they must be displayed on the map.",
+                            "infoB": "<br>Use the following <b>quick activation</b> for all school locations in Hamburg: Look under the menu item \"tools\" for the tool <b>\"$t(additional:addons.menu.tools.layerClusterToggler)\"</b>. With one click you can turn on all schools here and with the next click you can turn them off again. If you have activated all schools in this way, you can search for school locations (e.g. via the school names)."
+                        }
+                    }
+                },
                 "searchbarPlaceholder": "Search address, district, topics",
                 "general": {
                     "tabData": "Data",

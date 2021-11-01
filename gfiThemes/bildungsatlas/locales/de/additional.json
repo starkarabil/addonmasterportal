@@ -7,6 +7,16 @@
         },
         "gfiThemes": {
             "bildungsatlas": {
+                "quickHelp": {
+                    "search": {
+                        "title": "Regionaler Bildungsatlas - Hilfe",
+                        "searchForSchools": {
+                            "title": "Suche nach Schulstandorten",
+                            "infoA": "Um im Bildungsatlas nach Schulstandorten (z.B. über den Schulnamen) zu suchen müssen diese auf der Karte angezeigt werden.",
+                            "infoB": "<br>Nutzen folgende <b>Schnell-Aktivierung</b> für alle Schulstandorte in Hamburg: Schauen Sie unter dem Menü-Eintrag \"Werkzeuge\" nach dem Werkzeug <b>\"$t(additional:addons.menu.tools.layerClusterToggler)\"</b>. Mit einem Klick lassen sich hier alle Schulen an- und mit dem nächsten Klick wieder ausschalten. Haben Sie auf diese Weise alle Schulen aktiviert, können Sie nach Schulstandorten (z.B. über die Schulnamen) suchen."
+                        }
+                    }
+                },
                 "searchbarPlaceholder": "Suche nach Adresse, Bezirk, Stadtteil, Thema",
                 "general": {
                     "tabData": "Daten",
