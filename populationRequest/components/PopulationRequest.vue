@@ -145,7 +145,7 @@ export default {
             this.searcharea = 0;
             LoaderOverlay.show();
 
-            WPS.wpsRequest("1001", "einwohner_ermitteln.fmw", {
+            WPS.wpsRequest(this.wpsId, this.fmwProcess, {
                 "such_flaeche": JSON.stringify(geoJson)
             }, this.handleResponse.bind(this));
         },
@@ -202,7 +202,7 @@ export default {
             let responseResult = null;
 
             try {
-                responseResult = JSON.parse(response.ergebnis);
+                responseResult = JSON.parse(response?.ergebnis);
                 if (responseResult?.einwohner_fhh) {
                     this.inhabitantsFHHNum = responseResult.einwohner_fhh;
                     this.inhabitantsFHH = thousandsSeparator(responseResult.einwohner_fhh);

@@ -10,7 +10,9 @@
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  * @property {Boolean} rasterActive is the rasterLayer active
  * @property {Boolean} alkisAdressesActive is the alkisAdressesLayer active
- * @property {Integer} populationReqServiceId id of the population Request
+ * @property {Number} populationReqServiceId id of the population Request
+ * @property {String} wpsId The id of the used web processing service.
+ * @property {String} fmwProcess FME process triggered via the WPS.
  */
 const state = {
     active: false,
@@ -24,7 +26,9 @@ const state = {
     deactivateGFI: true,
     rasterActive: false,
     alkisAdressesActive: false,
-    populationReqServiceId: 2
+    populationReqServiceId: 2,
+    wpsId: "1001",
+    fmwProcess: "einwohner_ermitteln.fmw"
 };
 
 export default state;
