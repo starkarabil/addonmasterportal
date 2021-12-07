@@ -126,10 +126,6 @@ describe("addons/schoolRoutePlanning/store/actions/actionsSchoolRoutePlanningSch
                     "RouteAusgeben": {
                         "dataType": "boolean",
                         "value": 1
-                    },
-                    "tm_ttl": {
-                        "dataType": "integer",
-                        "value": 50
                     }
                 }, dispatch: true}
             ], {}, done);

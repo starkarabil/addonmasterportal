@@ -62,10 +62,6 @@ export default {
             "RouteAusgeben": {
                 "dataType": "boolean",
                 "value": 1
-            },
-            "tm_ttl": {
-                "dataType": "integer",
-                "value": 50
             }
         };
 
