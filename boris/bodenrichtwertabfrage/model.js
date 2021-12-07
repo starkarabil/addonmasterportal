@@ -12,7 +12,8 @@ import LoaderOverlay from "../../../src/utils/loaderOverlay";
 function initializeBrwAbfrageModel () {
     const BRWModel = Radio.request("ModelList", "getModelByAttributes", {id: "brw"}),
         defaults = {
-            "wpsId": 555,
+            "wpsId": 1001,
+            "fmwProcess": "BRWConvert.fmw",
             // Flag, auf mobile Darstellung
             "isViewMobile": false,
             // die ausgewählte Kategorie der BRW-Information
@@ -517,7 +518,7 @@ function initializeBrwAbfrageModel () {
         sendWpsConvertRequest: function () {
             const data = this.getConvertObject(this.get("selectedBrwFeature"));
 
-            WPS.wpsRequest("1001", "BRWConvert.fmw", data, this.handleConvertResponse.bind(this));
+            WPS.wpsRequest(this.get("wpsId"), this.get("fmwProcess"), data, this.handleConvertResponse.bind(this));
         },
 
         /**
@@ -640,7 +641,6 @@ function initializeBrwAbfrageModel () {
             if (brw.get("zStrassenLage")) {
                 requestObj = this.setObjectAttribute(requestObj, "ZStrLage", brw.get("zStrassenLage"), "string");
             }
-            requestObj = this.setObjectAttribute(requestObj, "tm_ttl", 50, "integer");
 
             return requestObj;
         },
