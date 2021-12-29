@@ -160,7 +160,6 @@ export default {
         }
     },
     created () {
-        this.$on("close", this.close);
         this.interaction = "";
         this.selectedBtn = "";
         this.layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");

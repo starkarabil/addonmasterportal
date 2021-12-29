@@ -12,9 +12,6 @@ export default {
     computed: {
         ...mapGetters("Tools/VueAddon", Object.keys(getters))
     },
-    created () {
-        this.$on("close", this.close);
-    },
     /**
      * Put initialize here if mounting occurs after config parsing
      * @returns {void}

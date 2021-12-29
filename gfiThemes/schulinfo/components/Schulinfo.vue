@@ -159,10 +159,12 @@ export default {
                     {{ category.name }}
                 </button>
                 <div class="favorite-container">
-                    <template v-for="component in importedComponents">
+                    <template
+                        v-for="component in importedComponents"
+                        :key="'favorite-' + component.name"
+                    >
                         <component
                             :is="component"
-                            :key="'favorite-' + component.name"
                             :feature="feature"
                         />
                     </template>

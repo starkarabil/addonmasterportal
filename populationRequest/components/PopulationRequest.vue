@@ -122,8 +122,6 @@ export default {
      * @returns {void}
      */
     created () {
-        this.$on("close", this.close);
-
         this.$on("onDrawEnd", function (geoJson) {
             this.makeRequest(geoJson);
         });
@@ -574,8 +572,8 @@ export default {
                                     ref="rasterCheckBox"
                                     :default-state="isRasterVisibleInMap"
                                     :title="translate('additional:modules.tools.populationRequest.switchOffFilter')"
-                                    :text-on="translate('common:snippets.checkbox.on')"
-                                    :text-off="translate('common:snippets.checkbox.off')"
+                                    :text-on="translate('snippets.checkbox.on')"
+                                    :text-off="translate('snippets.checkbox.off')"
                                     @change="triggerRaster"
                                 />
                             </div>
@@ -596,8 +594,8 @@ export default {
                                     ref="alkisAdressesCheckBox"
                                     :default-state="isAlkisAdressesVisibleInMap"
                                     :title="translate('additional:modules.tools.populationRequest.switchOffFilter')"
-                                    :text-on="translate('common:snippets.checkbox.on')"
-                                    :text-off="translate('common:snippets.checkbox.off')"
+                                    :text-on="translate('snippets.checkbox.on')"
+                                    :text-off="translate('snippets.checkbox.off')"
                                     @change="triggerAlkisAdresses"
                                 />
                             </div>
