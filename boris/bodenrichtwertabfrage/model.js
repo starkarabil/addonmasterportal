@@ -32,7 +32,13 @@ function initializeBrwAbfrageModel () {
             "isActive": true,
             "stripesLayer": false,
             "areaLayerSelected": true,
-            "infoText": "Bisher wurden die Bodenrichtwertzonen als Blockrandstreifen dargestellt. Jetzt sehen Sie initial flächendeckende Bodenrichtwertzonen. Hier können Sie die Anzeige der Blockrandstreifen einschalten."
+            "infoText": "Bisher wurden die Bodenrichtwertzonen als Blockrandstreifen dargestellt. Jetzt sehen Sie initial flächendeckende Bodenrichtwertzonen. Hier können Sie die Anzeige der Blockrandstreifen einschalten.",
+            "wpsTimeout": { // Timeout attribute for wps, is used in fme process.
+                "tm_ttl": {
+                    "dataType": "integer",
+                    "value": 50
+                }
+            }
         };
 
     Object.assign(BRWModel, {
@@ -565,6 +571,7 @@ function initializeBrwAbfrageModel () {
          * @returns {string}                Object für POST-Request
          */
         getConvertObject: function (brw) {
+            const wpsTimeout = this.get("wpsTimeout");
             let requestObj = {},
                 richtwert = brw.get("richtwert_euro").replace(".", "").replace(",", "."); // unpunctuate Wert für WPS
 
@@ -640,6 +647,9 @@ function initializeBrwAbfrageModel () {
             }
             if (brw.get("zStrassenLage")) {
                 requestObj = this.setObjectAttribute(requestObj, "ZStrLage", brw.get("zStrassenLage"), "string");
+            }
+            if (wpsTimeout && Object.keys(wpsTimeout).length > 0) {
+                requestObj = Object.assign(requestObj, wpsTimeout);
             }
 
             return requestObj;
