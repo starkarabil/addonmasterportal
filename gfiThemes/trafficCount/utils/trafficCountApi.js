@@ -640,7 +640,7 @@ export class TrafficCountApi {
         return this.http.get(url, (dataset) => {
             if (this.checkForObservations(dataset)) {
                 dataset[0].Datastreams[0].Observations.forEach(observation => {
-                    if (!observation?.result || !observation?.phenomenonTime) {
+                    if (typeof observation?.result !== "number" || !observation?.phenomenonTime) {
                         // continue
                         return;
                     }
