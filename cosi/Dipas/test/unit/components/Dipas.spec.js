@@ -13,7 +13,7 @@ import sinon from "sinon";
 import DipasComponent from "../../../components/Dipas.vue";
 import Dipas from "../../../store/index";
 import Tool from "../../../../../../src/modules/tools/Tool.vue";
-
+import * as prepareDistrictLevels from "../../../../DistrictSelector/utils/prepareDistrictLevels.js";
 
 Vue.use(Vuetify);
 
@@ -30,7 +30,7 @@ after(() => {
 
 
 describe("Dipas.vue", () => {
-    let component, store, clearStub, sandbox, sourceStub, addSingleAlertStub, cleanupStub, vuetify, progressStub, createIsochronesStub;
+    let component, store, clearStub, sandbox, sourceStub, vuetify;
 
     const mockConfigJson = {
         Portalconfig: {
@@ -61,13 +61,16 @@ describe("Dipas.vue", () => {
                 []
             ])
         };
-        addSingleAlertStub = sinon.stub();
-        cleanupStub = sinon.stub();
-        progressStub = sinon.stub();
 
         store = new Vuex.Store({
             namespaces: true,
             modules: {
+                Language: {
+                    namespaced: true,
+                    getters: {
+                        currentLocale: () => "de-DE"
+                    }
+                },
                 Tools: {
                     namespaced: true,
                     modules: {
@@ -84,9 +87,8 @@ describe("Dipas.vue", () => {
                 Map: {
                     namespaced: true,
                     getters: {
-                        map: () => ({
-                            addEventListener: () => sinon.stub(),
-                            removeEventListener: () => sinon.stub()
+                        ol2DMap: () => ({
+                            getLayers: () => ({getArray: sinon.stub()})
                         }),
                         projectionCode: () => "EPSG:25832"
                     },
@@ -99,17 +101,14 @@ describe("Dipas.vue", () => {
                             });
                         }
                     }
-                },
-                Alerting: {
-                    namespaced: true,
-                    actions: {
-                        addSingleAlert: addSingleAlertStub,
-                        cleanup: cleanupStub
-                    }
                 }
             },
             state: {
                 configJson: mockConfigJson
+            },
+            getters: {
+                isDefaultStyle: () => true,
+                uiStyle: () => true
             }
         });
         store.commit("Tools/Dipas/setActive", true);
@@ -122,6 +121,7 @@ describe("Dipas.vue", () => {
 
     // eslint-disable-next-line require-jsdoc, no-shadow
     async function mount (error = undefined) {
+        sinon.stub(prepareDistrictLevels, "getLayerById").callsFake(function fakeFn() {return {setZIndex: () => true}});
         sandbox.stub(Radio, "request").callsFake((a1, a2) => {
             if (a1 === "ModelList" && a2 === "getModelByAttributes") {
                 return modelMock;
@@ -130,12 +130,18 @@ describe("Dipas.vue", () => {
         });
         component = shallowMount(DipasComponent, {
             stubs: {Tool},
+            propsData: function() {
+                return {
+                    projectsFeatureCollection: () => {return {entries: () => []}}
+                }
+            },
             store,
             localVue,
             vuetify
         });
-
+        
         await component.vm.$nextTick();
+        sinon.stub(component.vm, "transformFeatures").callsFake(function fakeFn() {return true});
         return component;
     }
 
@@ -156,10 +162,13 @@ describe("Dipas.vue", () => {
 
     it("getContributionLabel", async function () {
         const wrapper = await mount(),
-            feature = {'id': 'test'},
+            testVar = "test",
+            feature = {
+                get: () => { return testVar}
+            },
             label = wrapper.vm.getContributionLabel(feature);
         
-        console.log(label);
+        expect(label.getText()).to.equal(testVar);
 
     })
 
