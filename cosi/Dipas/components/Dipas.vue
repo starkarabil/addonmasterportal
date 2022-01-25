@@ -73,20 +73,20 @@ export default {
         this.selectedStyling = "category";
         this.projectsFeatureCollection = this.transformFeatures(features);
         this.projectsColors = generateColorScale(undefined, "interpolateTurbo", this.projectsFeatureCollection.length).legend.colors;
-        for (const [index, feature] of this.projectsFeatureCollection.entries()) {
-            const id = feature.getProperties().id,
+        for (let i = 0; i < this.projectsFeatureCollection.length; i++) {
+            const id = this.projectsFeatureCollection[i].getProperties().id,
                 layer = {
                     id: id,
                     name: id,
                     project: true,
-                    features: [feature]
+                    features: [this.projectsFeatureCollection[i]]
                 },
                 style = new Style({
-                    fill: new Fill({color: this.projectsColors[index].replace("rgb", "rgba").replace(")", ", 0.4)")}),
-                    stroke: new Stroke({color: this.projectsColors[index], width: 4})
+                    fill: new Fill({color: this.projectsColors[i].replace("rgb", "rgba").replace(")", ", 0.4)")}),
+                    stroke: new Stroke({color: this.projectsColors[i], width: 4})
                 }),
-                len = Object.values(feature.getProperties().standardCategories).length,
-                colorScale = generateColorScaleByColor(this.projectsColors[index], len),
+                len = Object.values(this.projectsFeatureCollection[i].getProperties().standardCategories).length,
+                colorScale = generateColorScaleByColor(this.projectsColors[i], len),
                 rainbowColorScale = generateColorScale([0, len + 1], "interpolateRainbow").scale,
                 model = await this.addLayer(layer),
                 layerOnMap = getLayerById(this.map.getLayers().getArray(), id);
@@ -97,8 +97,8 @@ export default {
             model.set("isSelected", false);
 
             this.$set(this.projectsActive, id, {layer: false, contributions: false, heatmap: false});
-            this.$set(this.contributions, id, {index: index, colors: {}, rainbowColors: {}, features: [], loading: false});
-            for (const [catIndex, category] of Object.values(feature.getProperties().standardCategories).entries()) {
+            this.$set(this.contributions, id, {index: i, colors: {}, rainbowColors: {}, features: [], loading: false});
+            for (const [catIndex, category] of Object.values(this.projectsFeatureCollection[i].getProperties().standardCategories).entries()) {
                 this.contributions[id].colors[category] = colorScale(catIndex);
                 this.contributions[id].rainbowColors[category] = rainbowColorScale(catIndex);
             }
@@ -543,7 +543,7 @@ export default {
                         >
                             <v-list>
                                 <v-list-group
-                                    v-for="[index, feature] in projectsFeatureCollection.entries()"
+                                    v-for="(feature, index) in projectsFeatureCollection"
                                     :key="feature.getProperties().id"
                                 >
                                     <template #activator>
