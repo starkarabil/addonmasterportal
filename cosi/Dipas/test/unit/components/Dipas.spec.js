@@ -160,16 +160,12 @@ describe("Dipas.vue", () => {
         expect(ret.features).to.not.be.empty;
     });
 
-    it("getContributionLabel", async function () {
-        const wrapper = await mount(),
-            testVar = "test",
-            feature = {
-                get: () => { return testVar}
-            },
-            label = wrapper.vm.getContributionLabel(feature);
-        
-        expect(label.getText()).to.equal(testVar);
+    it("fetchContributions", async function () {
+        this.timeout(15000);
+        const wrapper = await mount();
 
+        const ret = await wrapper.vm.fetchContributions("clever-leitsystem");
+        expect(ret.features).to.not.be.empty;
     })
 
     it("transformFeatures", async function () {
@@ -513,4 +509,16 @@ describe("Dipas.vue", () => {
         
         
     });
+
+    it("getContributionLabel", async function () {
+        const wrapper = await mount(),
+            testVar = "test",
+            feature = {
+                get: () => { return testVar}
+            },
+            label = wrapper.vm.getContributionLabel(feature);
+        
+        expect(label.getText()).to.equal(testVar);
+
+    })
 });
